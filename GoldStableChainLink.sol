@@ -1,13 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-/*
- * GoldStableChainlink.sol (Student Exercise)
- * ERC20 stable token pegged to 1oz of gold (XAU/USD).
- * Oracle: Chainlink Price Feed (XAU/USD)
- * Collateral: ERC20 (e.g. USDC)
- */
-
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -24,7 +17,6 @@ interface AggregatorV3Interface {
             uint256 updatedAt,
             uint80 answeredInRound
         );
-
     function decimals() external view returns (uint8);
 }
 
