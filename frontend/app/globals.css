@@ -1,26 +1,59 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--background: #ffffff;
+	--foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Map theme variables into :root so tooling doesn't choke on @theme */
+:root {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Futuristic additions */
+.glassmorphism {
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	backdrop-filter: blur(6px) saturate(120%);
+}
+
+.neon {
+	text-shadow: 0 0 8px rgba(99, 102, 241, 0.6), 0 0 24px rgba(99, 102, 241, 0.2);
+}
+
+input,
+button {
+	outline: none;
+}
+
+/* subtle floating animation */
+@keyframes floatY {
+	0% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
+}
+.float {
+	animation: floatY 6s ease-in-out infinite;
 }
