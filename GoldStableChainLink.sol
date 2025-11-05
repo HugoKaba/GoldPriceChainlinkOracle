@@ -58,6 +58,7 @@ contract GoldStableChainlink is ERC20, Ownable, ReentrancyGuard {
         requiredCollateral = neededUSD * (10 ** decimalsCollateral) / 1e18;
     }
 
+    /// @notice Mint GOF by depositing collateral
     function mintWithCollateral(uint256 amountGOF) external nonReentrant {
         uint256 requiredCollateral = requiredCollateralForMint(amountGOF);
         uint256 fee = requiredCollateral * mintFeeBps / BPS_DENOM;
@@ -66,6 +67,7 @@ contract GoldStableChainlink is ERC20, Ownable, ReentrancyGuard {
         emit Minted(msg.sender, amountGOF, totalCollateral);
     }
 
+    /// @notice Redeem GOF for collateral
     function redeem(uint256 amountGOF) external nonReentrant {
         uint256 requiredCollateral = requiredCollateralForMint(amountGOF);
         uint256 fee = requiredCollateral * redeemFeeBps / BPS_DENOM;
