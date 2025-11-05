@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAccount, useContractRead, useWalletClient, usePublicClient } from 'wagmi';
-import { ABI } from './abi';
+import { tokenABI } from './tokenABI';
 import { parseUnits, formatUnits } from 'viem';
 import { CONTRACT_ADDRESS } from './constants';
 
@@ -29,14 +29,14 @@ export default function ContractUI() {
 	// Read gold price via hook
 	const { data: goldPriceData } = useContractRead({
 		address: CONTRACT_ADDRESS as `0x${string}`,
-		abi: ABI as any,
+		abi: tokenABI as any,
 		functionName: 'getGoldPrice',
 	});
 
 	// Read user's GOF balance via hook (call refetch manually)
 	const { data: balanceData } = useContractRead({
 		address: CONTRACT_ADDRESS as `0x${string}`,
-		abi: ABI as any,
+		abi: tokenABI as any,
 		functionName: 'balanceOf',
 		args: [address ?? '0x0000000000000000000000000000000000000000'],
 	});
@@ -75,7 +75,7 @@ export default function ContractUI() {
 			if (!publicClient) return;
 			const gp: any = await publicClient.readContract({
 				address: CONTRACT_ADDRESS as `0x${string}`,
-				abi: ABI as any,
+				abi: tokenABI as any,
 				functionName: 'getGoldPrice',
 				args: [],
 			});
@@ -93,7 +93,7 @@ export default function ContractUI() {
 			if (address) {
 				const b: any = await publicClient.readContract({
 					address: CONTRACT_ADDRESS as `0x${string}`,
-					abi: ABI as any,
+					abi: tokenABI as any,
 					functionName: 'balanceOf',
 					args: [address as `0x${string}`],
 				});
@@ -119,7 +119,7 @@ export default function ContractUI() {
 			setTxPending(true);
 			const hash = await walletClient?.data?.writeContract({
 				address: CONTRACT_ADDRESS as `0x${string}`,
-				abi: ABI as any,
+				abi: tokenABI as any,
 				functionName: 'mintWithCollateral',
 				args: [amount],
 			});
@@ -163,7 +163,7 @@ export default function ContractUI() {
 			setTxPending(true);
 			const hash = await walletClient?.data?.writeContract({
 				address: CONTRACT_ADDRESS as `0x${string}`,
-				abi: ABI as any,
+				abi: tokenABI as any,
 				functionName: 'redeem',
 				args: [amount],
 			});
