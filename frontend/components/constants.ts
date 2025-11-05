@@ -4,3 +4,4 @@
 export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '';
 export const COLLATERAL_ADDRESS = process.env.NEXT_PUBLIC_COLLATERAL_ADDRESS || '';
 export const PRICEFEED_ADDRESS = process.env.NEXT_PUBLIC_PRICEFEED_ADDRESS || '';
+export const NFT_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS || '';
