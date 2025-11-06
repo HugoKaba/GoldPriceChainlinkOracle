@@ -179,11 +179,11 @@ export default function NFTCollection() {
 
 	return (
 		<div className="w-full spartan-collection">
-			<div className="spartan-card" style={{ width: '100%' }}>
+			<div className="spartan-card gradient-border" style={{ width: '100%' }}>
 				{/* Header */}
 				<div className="flex items-center gap-3 mb-6">
-					<div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center shadow-lg">
-						<span className="text-2xl">🎨</span>
+					<div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center shadow-lg" aria-hidden>
+						{/* decorative color block; emoji removed for clarity */}
 					</div>
 					<div>
 						<h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100">
@@ -216,7 +216,7 @@ export default function NFTCollection() {
 								return (
 									<div
 										key={nft.tokenId}
-										className={`group relative spartan-nft spartan-card ${
+										className={`group relative spartan-nft spartan-card gradient-border ${
 											!isProcessing && canMint
 												? 'hover:scale-105 cursor-pointer'
 												: 'opacity-60 cursor-not-allowed'
@@ -231,7 +231,8 @@ export default function NFTCollection() {
 												(e.currentTarget.src = `https://via.placeholder.com/300?text=NFT+${nft.tokenId}`)
 											}
 										/>
-										<div className="meta">
+										<div className="nft-frame" />
+										<div className="meta nft-title">
 											<p className="font-bold text-sm">{nft.name || `NFT #${nft.tokenId}`}</p>
 										</div>
 										{isProcessing && (
@@ -248,8 +249,19 @@ export default function NFTCollection() {
 						</div>
 
 						{needsApproval && (
-							<div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800">
-								<button onClick={handleApproveOnly} className="spartan-btn primary w-full">
+							<div
+								className="mt-12 p-4 rounded-xl"
+								style={{
+									background:
+										'linear-gradient(90deg, rgba(var(--accent-start-rgb),0.06), rgba(var(--accent-end-rgb),0.06))',
+									border: 'none',
+								}}
+							>
+								<button
+									onClick={handleApproveOnly}
+									className="spartan-btn primary w-full"
+									style={{ border: 'none' }}
+								>
 									Approve Token Spending Only
 								</button>
 							</div>

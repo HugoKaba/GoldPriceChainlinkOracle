@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Image from 'next/image';
+// Image import removed — using inline SVG favicon in layout and CSS-based styling
 // ConnectButton moved to global header in layout
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { parseUnits } from 'viem';
@@ -122,27 +122,54 @@ export default function Home() {
 	}, [mintSuccess, fetchBalance]);
 
 	return (
-		<div className="relative min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 dark:from-zinc-950 dark:via-amber-950/20 dark:to-zinc-900 overflow-hidden">
+		<div className="relative min-h-screen overflow-hidden">
 			{/* Animated background elements */}
 			<div className="absolute inset-0 overflow-hidden pointer-events-none">
-				<div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/20 rounded-full blur-3xl animate-pulse"></div>
-				<div className="absolute bottom-20 right-10 w-96 h-96 bg-amber-400/20 rounded-full blur-3xl animate-pulse delay-700"></div>
-				<div className="absolute top-1/2 left-1/2 w-80 h-80 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+				<div
+					className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl animate-pulse"
+					style={{ background: 'rgba(var(--accent-start-rgb), 0.12)' }}
+				></div>
+				<div
+					className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl animate-pulse delay-700"
+					style={{ background: 'rgba(var(--accent-mid-rgb), 0.10)' }}
+				></div>
+				<div
+					className="absolute top-1/2 left-1/2 w-80 h-80 rounded-full blur-3xl animate-pulse delay-1000"
+					style={{ background: 'rgba(var(--accent-end-rgb), 0.06)' }}
+				></div>
 			</div>
 
-			<div className="relative flex min-h-screen flex-col items-center justify-center p-4 sm:p-8">
+			<div className="relative flex flex-col items-center justify-center p-4 sm:p-8">
 				<main className="spartan-container">
 					{/* Header */}
-					<div className="text-center mb-8 space-y-4 spartan-hero">
-						<div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-400 to-amber-500 shadow-2xl shadow-yellow-500/50 mb-4 transform hover:scale-110 transition-transform duration-300">
-							<span className="text-4xl">✨</span>
-						</div>
-						<h1 className="text-5xl sm:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 via-amber-500 to-orange-600 dark:from-yellow-400 dark:via-amber-300 dark:to-orange-400 tracking-tight">
-							Spart Stable Token
+					<div
+						className="text-center mb-8 space-y-4 spartan-hero"
+						style={{ position: 'relative', zIndex: 2 }}
+					>
+						<div
+							className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 transform hover:scale-110 transition-transform duration-300"
+							style={{
+								background: 'linear-gradient(135deg,var(--accent-start),var(--accent-end))',
+								boxShadow: '0 20px 50px rgba(var(--accent-mid-rgb),0.18)',
+							}}
+						></div>
+						<h1 className="text-5xl sm:text-6xl font-bold tracking-tight hero-title">
+							<span className="left">Spart</span>
+							<span className="right">Stable Token</span>
 						</h1>
-						<p className="text-xl text-amber-800 dark:text-amber-200 font-medium">
+						<div className="hero-underline" />
+						<p className="text-xl font-medium" style={{ color: 'var(--spartan-accent-2)' }}>
 							Premium collateralized stablecoin backed by real-world value
 						</p>
+
+						{/* decorative floating particles placed inside the hero area */}
+						<div className="floating-particles" aria-hidden>
+							<div className="dot" style={{ top: '25%', left: '8%', animationDelay: '0s' }} />
+							<div className="dot b" style={{ top: '10%', left: '40%', animationDelay: '2s' }} />
+							<div className="dot c" style={{ top: '60%', left: '72%', animationDelay: '5s' }} />
+							<div className="dot" style={{ top: '45%', left: '18%', animationDelay: '8s' }} />
+							<div className="dot b" style={{ top: '80%', left: '55%', animationDelay: '3s' }} />
+						</div>
 					</div>
 
 					{/* Header ConnectButton now displayed site-wide in the header */}
@@ -161,7 +188,13 @@ export default function Home() {
 											}}
 										>
 											<div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-												<div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-500 flex items-center justify-center shadow-lg">
+												<div
+													className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+													style={{
+														background:
+															'linear-gradient(135deg,var(--accent-start),var(--accent-end))',
+													}}
+												>
 													💰
 												</div>
 												<div>
@@ -203,11 +236,23 @@ export default function Home() {
 							{/* Right Column - Mint Card */}
 							<div className="space-y-6">
 								<div className="group relative dashboard-card mint-panel">
-									<div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+									<div
+										className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+										style={{
+											background:
+												'linear-gradient(135deg, rgba(var(--accent-mid-rgb),0.05), rgba(var(--accent-end-rgb),0.05))',
+										}}
+									></div>
 
 									<div className="relative">
 										<div className="flex items-center gap-3 mb-6">
-											<div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg">
+											<div
+												className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
+												style={{
+													background:
+														'linear-gradient(135deg,var(--accent-start),var(--accent-end))',
+												}}
+											>
 												<span className="text-2xl">⚡</span>
 											</div>
 											<h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-100">
@@ -244,7 +289,7 @@ export default function Home() {
 													className="flex justify-between spartan-helper"
 													style={{ marginTop: 6 }}
 												>
-													<span>You'll Receive</span>
+													<span>You&apos;ll Receive</span>
 													<strong>{mintAmount} SPART</strong>
 												</div>
 											</div>
@@ -351,14 +396,23 @@ export default function Home() {
 					)}
 
 					{!isConnected && (
-						<div className="text-center bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border border-amber-200/50 dark:border-amber-800/50 max-w-2xl mx-auto">
-							<div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-3xl flex items-center justify-center shadow-2xl shadow-amber-500/50 animate-bounce">
+						<div
+							className="text-center bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl rounded-3xl p-12 shadow-2xl border max-w-2xl mx-auto"
+							style={{ borderColor: 'rgba(var(--accent-mid-rgb),0.08)' }}
+						>
+							<div
+								className="w-24 h-24 mx-auto mb-6 rounded-3xl flex items-center justify-center shadow-2xl animate-bounce"
+								style={{
+									background: 'linear-gradient(135deg,var(--accent-start),var(--accent-end))',
+									boxShadow: '0 30px 80px rgba(var(--accent-mid-rgb),0.18)',
+								}}
+							>
 								<span className="text-5xl">🔐</span>
 							</div>
 							<h3 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100 mb-3">
 								Connect Your Wallet
 							</h3>
-							<p className="text-amber-700 dark:text-amber-300 text-lg">
+							<p style={{ color: 'var(--spartan-accent-2)', fontSize: '1.125rem' }}>
 								Connect your wallet to start minting Spart tokens and accessing your digital assets
 							</p>
 						</div>

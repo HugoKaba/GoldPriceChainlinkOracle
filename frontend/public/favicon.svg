@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#2EA1FF"/>
+      <stop offset="50%" stop-color="#6E5BFF"/>
+      <stop offset="100%" stop-color="#D94BFF"/>
+    </linearGradient>
+  </defs>
+  <rect rx="68" width="512" height="512" fill="url(#g)"/>
+  <g transform="translate(116 96) scale(0.6)" fill="#fff">
+    <!-- simplified Spartan helmet-ish S glyph -->
+    <path d="M128 0c-35 0-64 29-64 64v32H32C14 96 0 110 0 128v64c0 18 14 32 32 32h32v32c0 35 29 64 64 64s64-29 64-64v-32h32c18 0 32-14 32-32v-64c0-18-14-32-32-32h-32V64c0-35-29-64-64-64zM96 80c18 0 32 14 32 32v40h-32V80zM192 208c0 18-14 32-32 32s-32-14-32-32v-32h64v32z"/>
+  </g>
+</svg>

@@ -28,6 +28,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
+			<head>
+				<link rel="icon" href="/logo.png" />
+				<meta name="theme-color" content="#2EA1FF" />
+			</head>
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<WagmiProvider config={config}>
 					<QueryClientProvider client={queryClient}>
@@ -38,7 +42,9 @@ export default function RootLayout({
 									style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
 								>
 									<div className="spartan-brand">
-										<div className="logo">S</div>
+										<div className="logo">
+											<img src="/logo.png" alt="Spart" style={{ width: 36, height: 36 }} />
+										</div>
 										<div>
 											<div className="title">Spart</div>
 											<div className="muted" style={{ fontSize: '0.75rem' }}>
