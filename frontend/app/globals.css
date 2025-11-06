@@ -1,80 +1,385 @@
-@import 'tailwindcss';
+/* Global theme inspired by spartan.com — simplified and adapted for this project */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+/* Re-enable Tailwind's layers so the existing Tailwind classes in the app keep working */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
+	--spartan-bg: linear-gradient(180deg, #071231 0%, #0b2746 100%);
+	--spartan-surface: rgba(255, 255, 255, 0.03);
+	--spartan-card: rgba(255, 255, 255, 0.04);
+	--spartan-muted: #9aa6bf;
+	--spartan-text: #e6eef8;
+	--spartan-accent: #ffb703; /* gold accent */
+	--spartan-accent-2: #ffd966;
+	--spartan-radius: 14px;
+	--spartan-glass: rgba(255, 255, 255, 0.04);
 }
 
-/* Map theme variables into :root so tooling doesn't choke on @theme */
-:root {
-	--color-background: var(--background);
-	--color-foreground: var(--foreground);
-	--font-sans: var(--font-geist-sans);
-	--font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
 	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
+		--spartan-bg: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+		--spartan-surface: #ffffff;
+		--spartan-card: #fff;
+		--spartan-muted: #6b7280;
+		--spartan-text: #0b1220;
+		--spartan-accent: #0b72ff;
+		--spartan-accent-2: #0b95ff;
 	}
 }
 
+/* Base */
+* {
+	box-sizing: border-box;
+}
+html,
+body,
+#__next {
+	height: 100%;
+}
 body {
-	background: radial-gradient(1000px 600px at 10% 10%, rgba(255, 200, 50, 0.04), transparent),
-		radial-gradient(800px 400px at 90% 90%, rgba(99, 102, 241, 0.04), transparent),
-		var(--background);
-	color: var(--foreground);
-	font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	margin: 0;
+	padding: 0;
+	background: var(--spartan-bg);
+	color: var(--spartan-text);
+	font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+		Arial;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-/* Futuristic additions */
-.glassmorphism {
-	background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+/* Header */
+.spartan-header {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1rem 1.25rem;
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+	backdrop-filter: blur(6px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.spartan-brand {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+.spartan-brand .logo {
+	width: 44px;
+	height: 44px;
+	border-radius: 10px;
+	background: linear-gradient(135deg, var(--spartan-accent), var(--spartan-accent-2));
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	color: #111;
+}
+.spartan-brand .title {
+	font-weight: 700;
+	letter-spacing: 0.2px;
+	font-size: 1.05rem;
+}
+
+/* Hero */
+.spartan-hero {
+	padding: 2rem 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+.spartan-hero h1 {
+	font-size: clamp(1.8rem, 4vw, 3.6rem);
+	margin: 0;
+	font-weight: 800;
+	color: var(--spartan-text);
+}
+.spartan-hero p {
+	color: var(--spartan-muted);
+	margin-top: 0.75rem;
+	font-size: 1.05rem;
+}
+
+/* Cards */
+.spartan-card {
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+	border-radius: var(--spartan-radius);
+	padding: 0.75rem;
+	box-shadow: 0 6px 20px rgba(2, 6, 23, 0.45);
+	border: 1px solid rgba(255, 255, 255, 0.03);
+}
+.spartan-card .card-title {
+	font-weight: 700;
+	color: var(--spartan-text);
+}
+.spartan-grid {
+	display: grid;
+	gap: 0.75rem;
+	grid-template-columns: repeat(1, 1fr);
+}
+
+@media (min-width: 640px) {
+	.spartan-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (min-width: 980px) {
+	.spartan-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+@media (min-width: 1280px) {
+	.spartan-grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}
+
+/* Buttons */
+.spartan-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1rem;
+	border-radius: 12px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.spartan-btn.primary {
+	background: linear-gradient(90deg, var(--spartan-accent), var(--spartan-accent-2));
+	color: #08101a;
+	box-shadow: 0 8px 30px rgba(255, 183, 3, 0.12);
+}
+.spartan-btn.ghost {
+	background: transparent;
 	border: 1px solid rgba(255, 255, 255, 0.06);
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.02);
-	backdrop-filter: blur(8px) saturate(140%);
+	color: var(--spartan-text);
+}
+.spartan-btn:active {
+	transform: translateY(1px);
 }
 
-.neon {
-	text-shadow: 0 0 8px rgba(255, 200, 50, 0.14), 0 0 24px rgba(255, 140, 20, 0.08),
-		0 0 48px rgba(255, 100, 0, 0.04);
+/* NFT Card specifics */
+.spartan-nft {
+	position: relative;
+	border-radius: 10px;
+	overflow: hidden;
+	min-height: 120px;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.02));
+}
+.spartan-nft img,
+.nft-img {
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+	display: block;
+	background: #061324;
+}
+.spartan-nft .meta {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 0.6rem;
+	background: linear-gradient(180deg, transparent 0%, rgba(2, 6, 23, 0.6) 100%);
+	color: #fff;
 }
 
-input,
-button {
+@media (min-width: 640px) {
+	.spartan-nft img,
+	.nft-img {
+		height: 260px;
+	}
+}
+
+@media (min-width: 980px) {
+	.spartan-nft img,
+	.nft-img {
+		height: 300px;
+	}
+}
+
+/* Container to limit page width and centralize layout */
+.spartan-container {
+	width: 100%;
+	max-width: 1100px;
+	margin: 0 auto;
+	padding: 0 1rem;
+}
+
+/* Make the marketplace collection match the dashboard width and center it */
+.spartan-collection {
+	max-width: 980px;
+	margin: 0 auto;
+	padding: 1rem 0;
+}
+
+/* Compact header */
+.spartan-header {
+	padding: 0.5rem 1rem;
+}
+.spartan-brand .logo {
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	font-size: 0.95rem;
+}
+.spartan-brand .title {
+	font-size: 0.95rem;
+}
+.spartan-connect {
+	display: flex;
+	align-items: center;
+}
+.spartan-connect .rk-ConnectButton,
+.spartan-connect button {
+	padding: 6px 10px;
+	border-radius: 10px;
+}
+
+/* Dashboard specific styles */
+.dashboard-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	max-width: 980px;
+	margin: 0 auto;
+}
+@media (min-width: 992px) {
+	.dashboard-grid {
+		grid-template-columns: 1.1fr 1fr;
+	}
+}
+
+.dashboard-card {
+	border-radius: 18px;
+	padding: 1rem;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(2, 6, 23, 0.35));
+	border: 1px solid rgba(255, 140, 0, 0.06);
+	box-shadow: 0 10px 40px rgba(2, 6, 23, 0.65), 0 6px 18px rgba(255, 140, 0, 0.02) inset;
+}
+
+.dashboard-inner {
+	background: linear-gradient(180deg, rgba(12, 18, 28, 0.6), rgba(6, 12, 20, 0.45));
+	padding: 1rem;
+	border-radius: 12px;
+	border: 1px solid rgba(255, 140, 0, 0.04);
+}
+
+.balance-figure {
+	font-size: 2.6rem;
+	font-weight: 800;
+	color: var(--spartan-accent-2);
+	margin: 0.4rem 0;
+}
+.balance-label {
+	color: var(--spartan-muted);
+	font-size: 0.9rem;
+}
+
+.stat-row {
+	display: flex;
+	gap: 0.75rem;
+	margin-top: 0.9rem;
+	flex-wrap: wrap;
+}
+.stat-badge {
+	background: rgba(0, 0, 0, 0.35);
+	padding: 0.75rem 1rem;
+	border-radius: 12px;
+	min-width: 120px;
+}
+.stat-badge .stat-title {
+	color: var(--spartan-accent-2);
+	font-size: 0.85rem;
+}
+.stat-badge .stat-value {
+	font-weight: 700;
+	margin-top: 0.25rem;
+}
+
+.mint-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+.mint-panel .spartan-input {
+	font-size: 1.1rem;
+	padding: 0.85rem 1rem;
+	border-radius: 12px;
+}
+.mint-panel .spartan-btn.primary {
+	width: 100%;
+	padding: 0.9rem;
+	border-radius: 14px;
+	box-shadow: 0 14px 30px rgba(255, 167, 0, 0.12);
+}
+
+@media (max-width: 480px) {
+	.balance-figure {
+		font-size: 1.8rem;
+	}
+}
+
+/* Utilities */
+.muted {
+	color: var(--spartan-muted);
+}
+.accent {
+	color: var(--spartan-accent);
+}
+
+/* Form elements for mint/transfer */
+.spartan-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+.spartan-label {
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: var(--spartan-muted);
+}
+.spartan-input {
+	padding: 0.6rem 0.75rem;
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	background: rgba(255, 255, 255, 0.02);
+	color: var(--spartan-text);
 	outline: none;
 }
+.spartan-input::placeholder {
+	color: rgba(255, 255, 255, 0.45);
+}
+.spartan-input:focus {
+	box-shadow: 0 6px 20px rgba(11, 39, 70, 0.25);
+	border-color: var(--spartan-accent-2);
+}
+.spartan-form-row {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+}
+.spartan-helper {
+	font-size: 0.85rem;
+	color: var(--spartan-muted);
+}
 
-/* subtle floating animation */
-@keyframes floatY {
-	0% {
-		transform: translateY(0px);
+/* small responsive tweak for small screens to stack form buttons */
+@media (max-width: 520px) {
+	.spartan-form-row {
+		flex-direction: column;
+		align-items: stretch;
 	}
-	50% {
-		transform: translateY(-6px);
+}
+
+@media (min-width: 768px) {
+	.spartan-hero {
+		padding: 5rem 1rem;
 	}
-	100% {
-		transform: translateY(0px);
-	}
-}
-.float {
-	animation: floatY 6s ease-in-out infinite;
-}
-
-/* Card accent for neon borders used in screenshots */
-.card-accent {
-	border: 1px solid rgba(255, 160, 50, 0.06);
-	background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.25));
-}
-
-/* CTA gradient */
-.btn-cta {
-	background: linear-gradient(90deg, #ffb347, #ffcc33);
-	color: #081018;
-	box-shadow: 0 8px 24px rgba(255, 140, 20, 0.12);
-}
-
-.muted {
-	color: #9ca3af;
 }

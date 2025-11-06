@@ -7,7 +7,7 @@ import { WagmiProvider } from 'wagmi';
 import { config } from '../components/config';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './globals.css';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider, ConnectButton } from '@rainbow-me/rainbowkit';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -31,7 +31,28 @@ export default function RootLayout({
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 				<WagmiProvider config={config}>
 					<QueryClientProvider client={queryClient}>
-						<RainbowKitProvider>{children}</RainbowKitProvider>
+						<RainbowKitProvider>
+							<header className="spartan-header">
+								<div
+									className="spartan-container"
+									style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+								>
+									<div className="spartan-brand">
+										<div className="logo">S</div>
+										<div>
+											<div className="title">Spart</div>
+											<div className="muted" style={{ fontSize: '0.75rem' }}>
+												Spart Token
+											</div>
+										</div>
+									</div>
+									<div className="spartan-connect">
+										<ConnectButton />
+									</div>
+								</div>
+							</header>
+							{children}
+						</RainbowKitProvider>
 					</QueryClientProvider>
 				</WagmiProvider>
 			</body>

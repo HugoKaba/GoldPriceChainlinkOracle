@@ -232,6 +232,8 @@ contract NFTCollectionERC20 is ERC721, ERC721URIStorage, Ownable, ReentrancyGuar
         emit FundsWithdrawn(token, to, balance);
     }
     
+    // ========== GETTER FUNCTIONS ==========
+    
     /**
      * @dev Get total number of minted NFTs
      */
@@ -245,6 +247,123 @@ contract NFTCollectionERC20 is ERC721, ERC721URIStorage, Ownable, ReentrancyGuar
     function remainingSupply() external view returns (uint256) {
         return maxSupply - _tokenIdCounter.current();
     }
+    
+    /**
+     * @dev Get base URI (publicly accessible)
+     */
+    function baseURI() external view returns (string memory) {
+        return _baseTokenURI;
+    }
+    
+    /**
+     * @dev Get all token IDs owned by an address
+     * @param owner Address to query
+     * @return Array of token IDs
+     */
+    function tokensOfOwner(address owner) external view returns (uint256[] memory) {
+        uint256 tokenCount = balanceOf(owner);
+        uint256[] memory tokenIds = new uint256[](tokenCount);
+        uint256 index = 0;
+        
+        for (uint256 i = 0; i < _tokenIdCounter.current(); i++) {
+            if (_exists(i) && ownerOf(i) == owner) {
+                tokenIds[index] = i;
+                index++;
+            }
+        }
+        
+        return tokenIds;
+    }
+    
+    /**
+     * @dev Get collection info in a single call
+     * @return name_ Collection name
+     * @return symbol_ Collection symbol
+     * @return totalSupply_ Total minted
+     * @return maxSupply_ Maximum supply
+     * @return mintPrice_ Price per mint
+     * @return paymentToken_ Payment token address
+     * @return baseURI_ Base URI for metadata
+     * @return isPaused_ Whether minting is paused
+     */
+    function getCollectionInfo() external view returns (
+        string memory name_,
+        string memory symbol_,
+        uint256 totalSupply_,
+        uint256 maxSupply_,
+        uint256 mintPrice_,
+        address paymentToken_,
+        string memory baseURI_,
+        bool isPaused_
+    ) {
+        return (
+            name(),
+            symbol(),
+            _tokenIdCounter.current(),
+            maxSupply,
+            mintPrice,
+            address(paymentToken),
+            _baseTokenURI,
+            mintingPaused
+        );
+    }
+    
+    /**
+     * @dev Get minting info for a specific address
+     * @param minter Address to query
+     * @return mintedCount Number of NFTs minted by address
+     * @return remainingMints Remaining mints allowed (0 if unlimited)
+     * @return canMint Whether address can still mint
+     */
+    function getMintingInfo(address minter) external view returns (
+        uint256 mintedCount,
+        uint256 remainingMints,
+        bool canMint
+    ) {
+        mintedCount = mintedByAddress[minter];
+        
+        if (maxMintsPerAddress == 0) {
+            remainingMints = 0; // Unlimited
+            canMint = _tokenIdCounter.current() < maxSupply && !mintingPaused;
+        } else {
+            remainingMints = maxMintsPerAddress > mintedCount 
+                ? maxMintsPerAddress - mintedCount 
+                : 0;
+            canMint = remainingMints > 0 && 
+                    _tokenIdCounter.current() < maxSupply && 
+                    !mintingPaused;
+        }
+        
+        return (mintedCount, remainingMints, canMint);
+    }
+    
+    /**
+     * @dev Get contract balance of payment tokens
+     * @return Balance of payment tokens in contract
+     */
+    function getContractBalance() external view returns (uint256) {
+        return paymentToken.balanceOf(address(this));
+    }
+    
+    /**
+     * @dev Check if a token exists
+     * @param tokenId Token ID to check
+     * @return Whether token exists
+     */
+    function exists(uint256 tokenId) external view returns (bool) {
+        return _exists(tokenId);
+    }
+    
+    /**
+     * @dev Get total cost for minting multiple NFTs
+     * @param quantity Number of NFTs to mint
+     * @return Total cost in payment tokens
+     */
+    function getTotalCost(uint256 quantity) external view returns (uint256) {
+        return mintPrice * quantity;
+    }
+    
+    // ========== INTERNAL/OVERRIDE FUNCTIONS ==========
     
     /**
      * @dev Override base URI
@@ -272,5 +391,12 @@ contract NFTCollectionERC20 is ERC721, ERC721URIStorage, Ownable, ReentrancyGuar
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+    
+    /**
+     * @dev Internal function to check if token exists
+     */
+    function _exists(uint256 tokenId) internal view returns (bool) {
+        return _ownerOf(tokenId) != address(0);
     }
 }
