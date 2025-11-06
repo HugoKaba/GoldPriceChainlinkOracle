@@ -607,6 +607,21 @@ body {
 	font-weight: 800;
 }
 
+/* Owned badge */
+.nft-owned {
+	background: linear-gradient(
+		90deg,
+		rgba(var(--accent-start-rgb), 0.12),
+		rgba(var(--accent-end-rgb), 0.12)
+	);
+	color: var(--accent-end);
+	font-weight: 800;
+	padding: 6px 8px;
+	border-radius: 999px;
+	font-size: 0.8rem;
+	border: 1px solid rgba(var(--accent-mid-rgb), 0.06);
+}
+
 /* Hide accidental tiny purple chips that were overlapping NFT captions in some browsers */
 .spartan-nft .chip,
 .spartan-nft .tag,

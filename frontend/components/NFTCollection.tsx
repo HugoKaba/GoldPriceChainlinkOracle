@@ -32,6 +32,7 @@ export default function NFTCollection() {
 	const { writeContracts } = useWriteContracts();
 	const [nfts, setNFTs] = useState<NFT[]>([]);
 	const [selectedNFT, setSelectedNFT] = useState<string | null>(null);
+	const [ownedIds, setOwnedIds] = useState<Set<number>>(new Set());
 
 	const TOKEN_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS as `0x${string}`;
 	const IPFS_BASE_URL = process.env.NEXT_PUBLIC_IPFS_URL || 'https://ipfs.io/ipfs/';
@@ -64,10 +65,45 @@ export default function NFTCollection() {
 	const mintingInfo = data?.[1]?.status === 'success' ? data[1].result : null;
 	const userCanMint = mintingInfo ? Boolean(mintingInfo[2]) : false;
 
-	const tokenDecimals = data?.[2]?.status === 'success' ? Number(data[2].result) : 18;
-	const allowanceRaw = data?.[3]?.status === 'success' ? data[3].result : 0;
+	// NOTE: readContracts returns results in the same order as the `contracts` array above.
+	// index 0: getCollectionInfo
+	// index 1: getMintingInfo
+	// index 2: baseURI
+	// index 3: token decimals
+	// index 4: allowance
+	const tokenDecimals = data?.[3]?.status === 'success' ? Number(data[3].result) : 18;
+	const allowanceRaw = data?.[4]?.status === 'success' ? data[4].result : 0;
 	const allowance = typeof allowanceRaw === 'bigint' ? allowanceRaw : BigInt(String(allowanceRaw));
 	const needsApproval = allowance < mintPrice;
+
+	// --- Fetch owners for each tokenId to mark which NFTs are already owned by the connected address
+	const ownerCalls = uriList.map((_, i) => ({
+		...nftContract,
+		functionName: 'ownerOf',
+		args: [BigInt(i)],
+	}));
+	const { data: ownersData } = useReadContracts({ contracts: ownerCalls });
+
+	// populate ownedIds set when ownersData or address changes
+	useEffect(() => {
+		if (!ownersData || !Array.isArray(ownersData) || !address) {
+			setOwnedIds(new Set());
+			return;
+		}
+
+		const owned = new Set<number>();
+		ownersData.forEach((r, idx) => {
+			try {
+				if (r?.status === 'success' && r.result) {
+					const owner = String(r.result).toLowerCase();
+					if (owner === String(address).toLowerCase()) owned.add(idx);
+				}
+			} catch (e) {
+				// ignore
+			}
+		});
+		setOwnedIds(owned);
+	}, [ownersData, address]);
 
 	// Resolve IPFS URIs
 	const resolveIPFS = (uri: string) => {
@@ -215,16 +251,22 @@ export default function NFTCollection() {
 							{nfts.map((nft) => {
 								const isProcessing = selectedNFT === nft.tokenURI;
 								const canMint = userCanMint && !isPaused;
+								const isOwned = ownedIds.has(nft.tokenId);
 
 								return (
 									<div
 										key={nft.tokenId}
 										className={`group relative spartan-nft spartan-card gradient-border ${
-											!isProcessing && canMint
+											isOwned
+												? 'opacity-90 cursor-default'
+												: !isProcessing && canMint
 												? 'hover:scale-105 cursor-pointer'
 												: 'opacity-60 cursor-not-allowed'
 										}`}
-										onClick={() => !isProcessing && canMint && handleApproveAndMint(nft.tokenURI!)}
+										onClick={() => {
+											if (isOwned) return; // don't allow re-buying
+											if (!isProcessing && canMint) handleApproveAndMint(nft.tokenURI!);
+										}}
 									>
 										<img
 											src={nft.image}
@@ -235,8 +277,23 @@ export default function NFTCollection() {
 											}
 										/>
 										<div className="nft-frame" />
-										<div className="meta nft-title">
-											<p className="font-bold text-sm">{nft.name || `NFT #${nft.tokenId}`}</p>
+										<div
+											className="meta nft-title"
+											style={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'space-between',
+												gap: 8,
+											}}
+										>
+											<p className="font-bold text-sm" style={{ margin: 0 }}>
+												{nft.name || `NFT #${nft.tokenId}`}
+											</p>
+											{isOwned && (
+												<span className="nft-owned" title="You already own this">
+													Owned
+												</span>
+											)}
 										</div>
 										{isProcessing && (
 											<div className="absolute inset-0 bg-black/50 flex items-center justify-center">
