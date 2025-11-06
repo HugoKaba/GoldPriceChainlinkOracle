@@ -182,7 +182,10 @@ export default function NFTCollection() {
 			<div className="spartan-card gradient-border" style={{ width: '100%' }}>
 				{/* Header */}
 				<div className="flex items-center gap-3 mb-6">
-					<div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center shadow-lg" aria-hidden>
+					<div
+						className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center shadow-lg"
+						aria-hidden
+					>
 						{/* decorative color block; emoji removed for clarity */}
 					</div>
 					<div>
